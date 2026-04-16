@@ -4,7 +4,7 @@
 
 Financial advisors spend ~25 minutes every morning clicking between their CRM and risk assessment tools trying to answer one question: *"Which clients need my attention today?"* Client Pulse answers it in 30 seconds.
 
-[Live Demo]([[https://your-vercel-url.vercel.app](https://client-pulse-ochre.vercel.app/)](https://client-pulse-ochre.vercel.app/))] · [3-Min Video Walkthrough](https://loom.com/your-link) · [Product Requirements Document](./docs/PRD.md)
+[Live Demo](https://client-pulse-ochre.vercel.app/) · [3-Min Video Walkthrough](https://loom.com/your-link) · [Product Requirements Document](./docs/PRD.md)
 
 ---
 
