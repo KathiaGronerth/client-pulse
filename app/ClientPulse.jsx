@@ -532,7 +532,7 @@ export default function ClientPulse() {
             Things to do today as flat list. Client Pulse replaces this with 
             PRIORITIZED client view */}
         <div style={{ padding: "40px 0 16px" }}>
-          <p style={{ fontSize: 12, color: "#86868B", margin: "0 0 2px", fontWeight: 500 }}>Wednesday, April 15</p>
+          <p style={{ fontSize: 12, color: "#86868B", margin: "0 0 2px", fontWeight: 500 }}>{new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}</p>
           <h1 style={{ fontSize: 32, fontWeight: 800, color: "#1D1D1F", margin: "0 0 3px", letterSpacing: -0.5 }}>Good morning, Kathia</h1>
           <p style={{ fontSize: 16, color: "#86868B", margin: 0 }}>
             <span style={{ color: active.length > 0 ? "#FF3B30" : "#34C759", fontWeight: 700 }}>{active.length}</span>
