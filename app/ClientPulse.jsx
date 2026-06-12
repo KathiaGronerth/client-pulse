@@ -98,11 +98,10 @@ export default function ClientPulse() {
   const [sel, setSel] = useState(null);
   const [view, setView] = useState("dash");
   const [logged, setLogged] = useState(new Set());
-  // Call-prep brief state: text, which path produced it ("ai" | "rule-based"),
-  // and whether the request is in flight.
-  const [brief, setBrief] = useState(null);
-  const [briefSource, setBriefSource] = useState(null);
-  const [briefLoading, setBriefLoading] = useState(false);
+  // Brief result, keyed to the client it belongs to. Loading/text/source are
+  // derived from this (below) so the effect never calls setState synchronously
+  // in its body — which would trigger cascading renders.
+  const [briefData, setBriefData] = useState(null);
 
   // Fetch the brief from /api/brief whenever the brief view opens for a client.
   // The route returns an LLM-generated brief when a key is configured, else a
@@ -111,9 +110,6 @@ export default function ClientPulse() {
   useEffect(() => {
     if (view !== "brief" || !sel) return;
     let cancelled = false;
-    setBrief(null);
-    setBriefSource(null);
-    setBriefLoading(true);
     fetch("/api/brief", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -122,17 +118,22 @@ export default function ClientPulse() {
       .then((r) => r.json())
       .then((data) => {
         if (cancelled) return;
-        if (data && data.brief) { setBrief(data.brief); setBriefSource(data.source || "rule-based"); }
-        else { setBrief(generateBrief(sel)); setBriefSource("rule-based"); }
+        const text = data && data.brief ? data.brief : generateBrief(sel);
+        const source = data && data.brief ? (data.source || "rule-based") : "rule-based";
+        setBriefData({ id: sel.id, text, source });
       })
       .catch(() => {
-        if (cancelled) return;
-        setBrief(generateBrief(sel));
-        setBriefSource("rule-based");
-      })
-      .finally(() => { if (!cancelled) setBriefLoading(false); });
+        if (!cancelled) setBriefData({ id: sel.id, text: generateBrief(sel), source: "rule-based" });
+      });
     return () => { cancelled = true; };
   }, [view, sel]);
+
+  // Derived brief view state: show the brief only once it has loaded for the
+  // currently-selected client; otherwise the loading placeholder.
+  const briefReady = !!(sel && briefData && briefData.id === sel.id);
+  const briefLoading = view === "brief" && !briefReady;
+  const brief = briefReady ? briefData.text : null;
+  const briefSource = briefReady ? briefData.source : null;
 
   const handleLog = (id) => {
     const n = new Set(logged); n.add(id); setLogged(n);
