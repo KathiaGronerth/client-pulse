@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { computeHealthScore } from "../lib/scoring";
 
 /*
   CLIENT PULSE v3 — Grounded in Real Redtail CRM Fields
@@ -38,12 +39,11 @@ import { useState } from "react";
     - AI-generated call preparation context
 */
 
-const clients = [
+const rawClients = [
   {
     id: 234, // Redtail Contact ID
     name: "Thomas R. Bradley",
     preferredName: "Tom",
-    score: 23,
     // -- Redtail Contact Detail fields --
     status: "Active Client",
     category: "Client",
@@ -78,8 +78,7 @@ const clients = [
     downside6mo: "-$208,700",
     probSuccess: 87,
     riskTrend: "Increasing (+6)",
-    // -- Scoring --
-    engPenalty: -25, riskPenalty: -20, taskPenalty: -20, lifePenalty: -12,
+    // -- Scoring -- (score + penalties computed at runtime; see lib/scoring.js)
     reason: "73 days no contact + risk drift + 2 overdue tasks",
     lifeEvent: null, lifeEventDate: null,
     advisorNote: "HNW client. Reads financial news daily. Expects proactive outreach. Prefers in-person meetings.",
@@ -88,7 +87,6 @@ const clients = [
     id: 187,
     name: "Robert T. Chen",
     preferredName: "Bob",
-    score: 37,
     status: "Active Client",
     category: "Client",
     dateOfBirth: "11/03/1962",
@@ -112,7 +110,6 @@ const clients = [
     oldestTaskSubject: "Send retirement income projection",
     riskTarget: 55, riskActual: 58, riskGap: 3, riskStatus: "Aligned",
     downside6mo: "-$112,500", probSuccess: 85, riskTrend: "Stable",
-    engPenalty: -35, riskPenalty: -5, taskPenalty: -20, lifePenalty: -3,
     reason: "128 days no contact — retirement review imminent",
     lifeEvent: "Retirement review", lifeEventDate: "May 1",
     advisorNote: "Detail-oriented. Wants specific numbers, not general advice. Retiring in 18 months.",
@@ -121,7 +118,6 @@ const clients = [
     id: 156,
     name: "Margaret A. Johnson",
     preferredName: "Margaret",
-    score: 47,
     status: "Active Client",
     category: "Client",
     dateOfBirth: "06/15/1958",
@@ -145,7 +141,6 @@ const clients = [
     oldestTaskSubject: "Update beneficiary forms",
     riskTarget: 45, riskActual: 62, riskGap: 17, riskStatus: "Misaligned",
     downside6mo: "-$58,200", probSuccess: 72, riskTrend: "Increasing (+5)",
-    engPenalty: -5, riskPenalty: -30, taskPenalty: -15, lifePenalty: -3,
     reason: "Risk drift 45→62 + birthday in 6 days",
     lifeEvent: "Birthday", lifeEventDate: "Apr 22",
     advisorNote: "Prefers morning calls. Conservative investor, worries about downside risk.",
@@ -154,7 +149,6 @@ const clients = [
     id: 198,
     name: "Diana L. Morales",
     preferredName: "Diana",
-    score: 51,
     status: "Active Client",
     category: "Client",
     dateOfBirth: "03/22/1975",
@@ -178,7 +172,6 @@ const clients = [
     oldestTaskSubject: "Review bond allocation options",
     riskTarget: 35, riskActual: 51, riskGap: 16, riskStatus: "Misaligned",
     downside6mo: "-$48,000", probSuccess: 68, riskTrend: "Increasing (+8)",
-    engPenalty: -1, riskPenalty: -29, taskPenalty: -7, lifePenalty: -12,
     reason: "Conservative client — significant risk drift (35→51)",
     lifeEvent: null, lifeEventDate: null,
     advisorNote: "Checks portfolio weekly. Needs proactive reassurance during volatility.",
@@ -187,7 +180,6 @@ const clients = [
     id: 245,
     name: "Carlos & Maria Reyes",
     preferredName: "Carlos",
-    score: 63,
     status: "Active Client",
     category: "Client",
     dateOfBirth: "05/20/1968",
@@ -211,7 +203,6 @@ const clients = [
     oldestTaskSubject: "Model Maria's reduced income scenario",
     riskTarget: 52, riskActual: 59, riskGap: 7, riskStatus: "Minor Drift",
     downside6mo: "-$71,500", probSuccess: 76, riskTrend: "Increasing (+3)",
-    engPenalty: -1, riskPenalty: -13, taskPenalty: -20, lifePenalty: -3,
     reason: "Task 46 days overdue + minor risk drift",
     lifeEvent: "Birthday", lifeEventDate: "May 20",
     advisorNote: "Carlos and Maria have different retirement timelines. Maria retiring first. Complex planning.",
@@ -220,7 +211,6 @@ const clients = [
     id: 301,
     name: "William J. Thompson",
     preferredName: "Bill",
-    score: 75,
     status: "Active Client",
     category: "Client",
     dateOfBirth: "01/28/1970",
@@ -244,7 +234,6 @@ const clients = [
     oldestTaskSubject: "Send Q1 performance summary",
     riskTarget: 40, riskActual: 44, riskGap: 4, riskStatus: "Aligned",
     downside6mo: "-$64,800", probSuccess: 82, riskTrend: "Stable",
-    engPenalty: -1, riskPenalty: -7, taskPenalty: -5, lifePenalty: -12,
     reason: "On track — Q1 summary pending",
     lifeEvent: null, lifeEventDate: null,
     advisorNote: "Wants quarterly updates. Moderate risk. Two kids, ages 12 and 15.",
@@ -253,7 +242,6 @@ const clients = [
     id: 178,
     name: "Elena M. Gutierrez",
     preferredName: "Elena",
-    score: 85,
     status: "Active Client",
     category: "Client",
     dateOfBirth: "12/05/1980",
@@ -277,7 +265,6 @@ const clients = [
     oldestTaskSubject: null,
     riskTarget: 55, riskActual: 56, riskGap: 1, riskStatus: "Aligned",
     downside6mo: "-$23,100", probSuccess: 64, riskTrend: "Stable",
-    engPenalty: -1, riskPenalty: -2, taskPenalty: 0, lifePenalty: -12,
     reason: "Fully aligned",
     lifeEvent: null, lifeEventDate: null,
     advisorNote: "Younger client, growth-oriented. Comfortable with video calls.",
@@ -286,7 +273,6 @@ const clients = [
     id: 312,
     name: "David & Lisa Kim",
     preferredName: "David & Lisa",
-    score: 87,
     status: "Active Client",
     category: "Client",
     dateOfBirth: "07/19/1972",
@@ -310,12 +296,15 @@ const clients = [
     oldestTaskSubject: null,
     riskTarget: 48, riskActual: 48, riskGap: 0, riskStatus: "Aligned",
     downside6mo: "-$45,200", probSuccess: 88, riskTrend: "Stable",
-    engPenalty: -1, riskPenalty: 0, taskPenalty: 0, lifePenalty: -12,
     reason: "Fully aligned — recent contact",
     lifeEvent: null, lifeEventDate: null,
     advisorNote: "Make decisions together. 529 planning is top priority for next 18 months.",
   },
 ];
+
+// Score + penalty breakdown are computed at runtime from the structured
+// fields above — no values are hardcoded. See lib/scoring.js.
+const clients = rawClients.map(c => ({ ...c, ...computeHealthScore(c) }));
 
 const needsAttention = clients.filter(c => c.score < 55).sort((a,b) => a.score - b.score);
 const healthy = clients.filter(c => c.score >= 55).sort((a,b) => b.score - a.score);
