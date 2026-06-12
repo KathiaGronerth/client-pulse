@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { computeHealthScore } from "../lib/scoring";
+import { generateBrief } from "../lib/brief";
 
 /*
   CLIENT PULSE v3 — Grounded in Real Redtail CRM Fields
@@ -354,22 +355,45 @@ function PenaltyRow({ label, penalty, detail, source, color }) {
   );
 }
 
-function generateBrief(c) {
-  const p = [];
-  if (c.riskGap > 10) p.push(`${c.preferredName}'s portfolio Risk Number has drifted to ${c.riskActual} against a target of ${c.riskTarget} (gap: ${c.riskGap} points, trend: ${c.riskTrend.toLowerCase()}). This warrants a rebalancing conversation.`);
-  else if (c.riskGap > 3) p.push(`Minor risk drift detected: portfolio at ${c.riskActual} vs target ${c.riskTarget}. Worth monitoring but not urgent.`);
-  else p.push(`Portfolio risk is well-aligned at ${c.riskActual} (target: ${c.riskTarget}).`);
-  if (c.lastActivityNotes) p.push(`Last ${c.lastActivityType.toLowerCase()} (${c.lastActivity}): ${c.lastActivitySubject}. ${c.lastActivityNotes.split('.').slice(0,2).join('.')}.`);
-  if (c.openTasks > 0) p.push(`Open commitment: "${c.oldestTaskSubject}" — ${c.taskDaysOverdue > 0 ? `${c.taskDaysOverdue} days overdue` : "due soon"}.`);
-  if (c.lifeEvent) p.push(`Upcoming: ${c.lifeEvent} on ${c.lifeEventDate}.`);
-  p.push(`Goal: ${c.lifeGoal}. Probability of success: ${c.probSuccess}%.`);
-  return p.join(" ");
-}
-
 export default function ClientPulse() {
   const [sel, setSel] = useState(null);
   const [view, setView] = useState("dash");
   const [logged, setLogged] = useState(new Set());
+  // Call-prep brief state: text, which path produced it ("ai" | "rule-based"),
+  // and whether the request is in flight.
+  const [brief, setBrief] = useState(null);
+  const [briefSource, setBriefSource] = useState(null);
+  const [briefLoading, setBriefLoading] = useState(false);
+
+  // Fetch the brief from /api/brief whenever the brief view opens for a client.
+  // The route returns an LLM-generated brief when a key is configured, else a
+  // rule-based one. If the request itself fails, fall back to the local
+  // deterministic generator so the view always has content.
+  useEffect(() => {
+    if (view !== "brief" || !sel) return;
+    let cancelled = false;
+    setBrief(null);
+    setBriefSource(null);
+    setBriefLoading(true);
+    fetch("/api/brief", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(sel),
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (cancelled) return;
+        if (data && data.brief) { setBrief(data.brief); setBriefSource(data.source || "rule-based"); }
+        else { setBrief(generateBrief(sel)); setBriefSource("rule-based"); }
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setBrief(generateBrief(sel));
+        setBriefSource("rule-based");
+      })
+      .finally(() => { if (!cancelled) setBriefLoading(false); });
+    return () => { cancelled = true; };
+  }, [view, sel]);
 
   const handleLog = (id) => {
     const n = new Set(logged); n.add(id); setLogged(n);
@@ -408,9 +432,12 @@ export default function ClientPulse() {
           {sel.pastDueActivities > 0 && <Tag label={`${sel.pastDueActivities} past due`} color="#FF3B30" />}
         </div>
         <div style={{ background: "#F2F2F7", borderRadius: 14, padding: 18, marginBottom: 6 }}>
-          <p style={{ fontSize: 14, lineHeight: 1.6, color: "#1D1D1F", margin: 0 }}>{generateBrief(sel)}</p>
+          <p style={{ fontSize: 14, lineHeight: 1.6, color: briefLoading ? "#86868B" : "#1D1D1F", margin: 0 }}>{briefLoading ? "Preparing brief…" : brief}</p>
         </div>
-        <p style={{ fontSize: 10, color: "#C7C7CC", margin: "0 0 16px", fontStyle: "italic" }}>Generated from Redtail CRM + Nitrogen data · Review before calling</p>
+        <p style={{ fontSize: 10, color: "#C7C7CC", margin: "0 0 16px", fontStyle: "italic" }}>
+          Generated from Redtail CRM + Nitrogen data · Review before calling
+          {!briefLoading && briefSource && ` · ${briefSource === "ai" ? "AI-generated" : "Rule-based"}`}
+        </p>
         {sel.advisorNote && (
           <div style={{ background: "#FFFBEB", borderRadius: 10, padding: "10px 14px", marginBottom: 16, border: "1px solid #FEF3C7" }}>
             <p style={{ fontSize: 10, fontWeight: 600, color: "#92400E", margin: "0 0 3px", textTransform: "uppercase", letterSpacing: 0.5 }}>Advisor Note</p>
