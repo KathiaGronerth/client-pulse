@@ -1,0 +1,12 @@
+{
+  "_comment": "Redtail reference/lookup tables. In the live API these are separate endpoints (e.g. /lookups/servicing_advisors, /contactcategories, /contactstatuses) returning numeric ids that contacts reference via *_id foreign keys. The MockAdapter resolves them the way a RedtailAdapter would after fetching the lookup tables.",
+  "servicing_advisors": {
+    "1": "Carl Canga"
+  },
+  "categories": {
+    "1": "Client"
+  },
+  "statuses": {
+    "1": "Active Client"
+  }
+}

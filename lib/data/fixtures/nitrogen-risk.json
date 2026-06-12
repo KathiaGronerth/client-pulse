@@ -1,0 +1,117 @@
+{
+  "_comment": "Synthetic Nitrogen (formerly Riskalyze) risk data. The Nitrogen API is partner/OAuth-gated — there is no self-service public developer portal — so this mirrors the documented concepts (Risk Number 1–99: client tolerance vs. portfolio actual; six-month / 95% historical range; probability of success) rather than a verified public schema. Responses wrap the payload under a top-level `data` key. `client_external_id` joins to the Redtail contact id. `risk_status`/`risk_trend` are Nitrogen-surfaced categorical labels (stored, not re-derived); `risk_number` (client) is the tolerance, `portfolio.risk_number` is the measured actual.",
+  "data": [
+    {
+      "id": "cl_234",
+      "client_external_id": 234,
+      "risk_number": 50,
+      "risk_status": "Misaligned",
+      "risk_trend": "Increasing (+6)",
+      "probability_of_success": 87,
+      "portfolio": {
+        "id": "pf_234",
+        "risk_number": 61,
+        "gpa": "C",
+        "six_month_range": { "downside": -208700, "upside": 296400 }
+      }
+    },
+    {
+      "id": "cl_187",
+      "client_external_id": 187,
+      "risk_number": 55,
+      "risk_status": "Aligned",
+      "risk_trend": "Stable",
+      "probability_of_success": 85,
+      "portfolio": {
+        "id": "pf_187",
+        "risk_number": 58,
+        "gpa": "B",
+        "six_month_range": { "downside": -112500, "upside": 187500 }
+      }
+    },
+    {
+      "id": "cl_156",
+      "client_external_id": 156,
+      "risk_number": 45,
+      "risk_status": "Misaligned",
+      "risk_trend": "Increasing (+5)",
+      "probability_of_success": 72,
+      "portfolio": {
+        "id": "pf_156",
+        "risk_number": 62,
+        "gpa": "C",
+        "six_month_range": { "downside": -58200, "upside": 91500 }
+      }
+    },
+    {
+      "id": "cl_198",
+      "client_external_id": 198,
+      "risk_number": 35,
+      "risk_status": "Misaligned",
+      "risk_trend": "Increasing (+8)",
+      "probability_of_success": 68,
+      "portfolio": {
+        "id": "pf_198",
+        "risk_number": 51,
+        "gpa": "C",
+        "six_month_range": { "downside": -48000, "upside": 73600 }
+      }
+    },
+    {
+      "id": "cl_245",
+      "client_external_id": 245,
+      "risk_number": 52,
+      "risk_status": "Minor Drift",
+      "risk_trend": "Increasing (+3)",
+      "probability_of_success": 76,
+      "portfolio": {
+        "id": "pf_245",
+        "risk_number": 59,
+        "gpa": "B",
+        "six_month_range": { "downside": -71500, "upside": 118300 }
+      }
+    },
+    {
+      "id": "cl_301",
+      "client_external_id": 301,
+      "risk_number": 40,
+      "risk_status": "Aligned",
+      "risk_trend": "Stable",
+      "probability_of_success": 82,
+      "portfolio": {
+        "id": "pf_301",
+        "risk_number": 44,
+        "gpa": "B",
+        "six_month_range": { "downside": -64800, "upside": 102200 }
+      }
+    },
+    {
+      "id": "cl_178",
+      "client_external_id": 178,
+      "risk_number": 55,
+      "risk_status": "Aligned",
+      "risk_trend": "Stable",
+      "probability_of_success": 64,
+      "portfolio": {
+        "id": "pf_178",
+        "risk_number": 56,
+        "gpa": "B",
+        "six_month_range": { "downside": -23100, "upside": 38900 }
+      }
+    },
+    {
+      "id": "cl_312",
+      "client_external_id": 312,
+      "risk_number": 48,
+      "risk_status": "Aligned",
+      "risk_trend": "Stable",
+      "probability_of_success": 88,
+      "portfolio": {
+        "id": "pf_312",
+        "risk_number": 48,
+        "gpa": "A",
+        "six_month_range": { "downside": -45200, "upside": 71800 }
+      }
+    }
+  ]
+}

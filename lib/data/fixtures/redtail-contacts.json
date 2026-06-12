@@ -1,0 +1,266 @@
+{
+  "_comment": "Synthetic Redtail CRM contacts, shaped after the documented REST API (https://api2.redtailtechnology.com/crm/v1/contacts). snake_case fields, numeric *_id foreign keys into redtail-lookups.json, and sub-collections (accounts, activities, udfs) the live API returns via ?include=. `header` mirrors the values Redtail surfaces on the contact header bar; the API derives past_due_activities / open_tasks from the activity list rather than returning a single field — provided here precomputed for the mock. `activities` carries the salient records (the last completed engagement + the oldest open task); `start_date` is the real activity date, and meta.as_of is the snapshot date the dashboard's day-counts are measured against.",
+  "meta": { "total_records": 8, "total_pages": 1, "current_page": 1, "per_page": 50, "as_of": "2026-04-15" },
+  "contacts": [
+    {
+      "id": 234,
+      "type": "Crm",
+      "first_name": "Thomas",
+      "middle_name": "R",
+      "last_name": "Bradley",
+      "full_name": "Thomas R. Bradley",
+      "nickname": "Tom",
+      "status_id": 1,
+      "category_id": 1,
+      "marital_status": "Married",
+      "gender": "Male",
+      "dob": "1960-04-30",
+      "servicing_advisor_id": 1,
+      "client_since": "2014-06-10",
+      "client": true,
+      "header": { "next_review": "Overdue", "past_due_activities": 2, "active_workflows": 1, "open_tasks": 2 },
+      "accounts": [
+        { "id": 5001, "contact_id": 234, "account_type": "Managed", "balance": 1890000, "as_of_date": "2026-04-15" }
+      ],
+      "activities": [
+        { "id": 9001, "contact_id": 234, "activity_type": "Appointment", "subject": "Annual Review - Tom & Joan Bradley", "description": "Tom concerned about inflation impact on fixed income allocation. Discussed TIPS. Need to model inflation scenarios. Joan wants to review estate documents.", "start_date": "2026-02-01", "completed": true },
+        { "id": 9002, "contact_id": 234, "activity_type": "Task", "subject": "Model inflation scenarios for TIPS allocation", "start_date": "2026-03-14", "completed": false }
+      ],
+      "udfs": [
+        { "udf_id": 1, "name": "Contact Cadence Target", "value": "60" },
+        { "udf_id": 2, "name": "Client Tier", "value": "Platinum" },
+        { "udf_id": 3, "name": "Life Goal", "value": "Retirement income + Inflation protection" },
+        { "udf_id": 8, "name": "Priority Reason", "value": "73 days no contact + risk drift + 2 overdue tasks" },
+        { "udf_id": 9, "name": "Advisor Note", "value": "HNW client. Reads financial news daily. Expects proactive outreach. Prefers in-person meetings." }
+      ]
+    },
+    {
+      "id": 187,
+      "type": "Crm",
+      "first_name": "Robert",
+      "middle_name": "T",
+      "last_name": "Chen",
+      "full_name": "Robert T. Chen",
+      "nickname": "Bob",
+      "status_id": 1,
+      "category_id": 1,
+      "marital_status": "Married",
+      "gender": "Male",
+      "dob": "1962-11-03",
+      "servicing_advisor_id": 1,
+      "client_since": "2017-08-20",
+      "client": true,
+      "header": { "next_review": "Overdue", "past_due_activities": 3, "active_workflows": 1, "open_tasks": 3 },
+      "accounts": [
+        { "id": 5002, "contact_id": 187, "account_type": "Managed", "balance": 1250000, "as_of_date": "2026-04-15" }
+      ],
+      "activities": [
+        { "id": 9011, "contact_id": 187, "activity_type": "Appointment", "subject": "Pre-retirement planning session", "description": "Reviewed pension + Social Security timing. Committed to send retirement income projection. Bob wants to retire at 63 — 18 months away.", "start_date": "2025-12-08", "completed": true },
+        { "id": 9012, "contact_id": 187, "activity_type": "Task", "subject": "Send retirement income projection", "start_date": "2026-03-24", "completed": false }
+      ],
+      "udfs": [
+        { "udf_id": 1, "name": "Contact Cadence Target", "value": "90" },
+        { "udf_id": 2, "name": "Client Tier", "value": "Platinum" },
+        { "udf_id": 3, "name": "Life Goal", "value": "Retirement at 63" },
+        { "udf_id": 8, "name": "Priority Reason", "value": "128 days no contact — retirement review imminent" },
+        { "udf_id": 9, "name": "Advisor Note", "value": "Detail-oriented. Wants specific numbers, not general advice. Retiring in 18 months." },
+        { "udf_id": 10, "name": "Life Event", "value": "Retirement review" },
+        { "udf_id": 11, "name": "Life Event Date", "value": "May 1" }
+      ]
+    },
+    {
+      "id": 156,
+      "type": "Crm",
+      "first_name": "Margaret",
+      "middle_name": "A",
+      "last_name": "Johnson",
+      "full_name": "Margaret A. Johnson",
+      "nickname": "Margaret",
+      "status_id": 1,
+      "category_id": 1,
+      "marital_status": "Married",
+      "gender": "Female",
+      "dob": "1958-06-15",
+      "servicing_advisor_id": 1,
+      "client_since": "2019-03-15",
+      "client": true,
+      "header": { "next_review": "-", "past_due_activities": 2, "active_workflows": 0, "open_tasks": 2 },
+      "accounts": [
+        { "id": 5003, "contact_id": 156, "account_type": "Managed", "balance": 485000, "as_of_date": "2026-04-15" }
+      ],
+      "activities": [
+        { "id": 9021, "contact_id": 156, "activity_type": "Phone Call", "subject": "College fund discussion - daughter Lisa", "description": "Discussed daughter Lisa's college fund. Agreed to review 529 allocation. Margaret concerned about market volatility after recent news.", "start_date": "2026-01-12", "completed": true },
+        { "id": 9022, "contact_id": 156, "activity_type": "Task", "subject": "Update beneficiary forms", "start_date": "2026-04-03", "completed": false }
+      ],
+      "udfs": [
+        { "udf_id": 1, "name": "Contact Cadence Target", "value": "90" },
+        { "udf_id": 2, "name": "Client Tier", "value": "Gold" },
+        { "udf_id": 3, "name": "Life Goal", "value": "Retirement + Education" },
+        { "udf_id": 8, "name": "Priority Reason", "value": "Risk drift 45→62 + birthday in 6 days" },
+        { "udf_id": 9, "name": "Advisor Note", "value": "Prefers morning calls. Conservative investor, worries about downside risk." },
+        { "udf_id": 10, "name": "Life Event", "value": "Birthday" },
+        { "udf_id": 11, "name": "Life Event Date", "value": "Apr 22" }
+      ]
+    },
+    {
+      "id": 198,
+      "type": "Crm",
+      "first_name": "Diana",
+      "middle_name": "L",
+      "last_name": "Morales",
+      "full_name": "Diana L. Morales",
+      "nickname": "Diana",
+      "status_id": 1,
+      "category_id": 1,
+      "marital_status": "Single",
+      "gender": "Female",
+      "dob": "1975-03-22",
+      "servicing_advisor_id": 1,
+      "client_since": "2021-01-10",
+      "client": true,
+      "header": { "next_review": "-", "past_due_activities": 1, "active_workflows": 0, "open_tasks": 1 },
+      "accounts": [
+        { "id": 5004, "contact_id": 198, "account_type": "Managed", "balance": 320000, "as_of_date": "2026-04-15" }
+      ],
+      "activities": [
+        { "id": 9031, "contact_id": 198, "activity_type": "Phone Call", "subject": "Post-dip reallocation discussion", "description": "Diana anxious about losses after Feb market dip. Discussed conservative reallocation. Committed to review bond allocation options.", "start_date": "2026-02-20", "completed": true },
+        { "id": 9032, "contact_id": 198, "activity_type": "Task", "subject": "Review bond allocation options", "start_date": "2026-04-10", "completed": false }
+      ],
+      "udfs": [
+        { "udf_id": 1, "name": "Contact Cadence Target", "value": "60" },
+        { "udf_id": 2, "name": "Client Tier", "value": "Silver" },
+        { "udf_id": 3, "name": "Life Goal", "value": "Wealth preservation" },
+        { "udf_id": 8, "name": "Priority Reason", "value": "Conservative client — significant risk drift (35→51)" },
+        { "udf_id": 9, "name": "Advisor Note", "value": "Checks portfolio weekly. Needs proactive reassurance during volatility." }
+      ]
+    },
+    {
+      "id": 245,
+      "type": "Crm",
+      "first_name": "Carlos & Maria",
+      "middle_name": "",
+      "last_name": "Reyes",
+      "full_name": "Carlos & Maria Reyes",
+      "nickname": "Carlos",
+      "status_id": 1,
+      "category_id": 1,
+      "marital_status": "Married",
+      "gender": "Male",
+      "dob": "1968-05-20",
+      "servicing_advisor_id": 1,
+      "client_since": "2016-10-12",
+      "client": true,
+      "header": { "next_review": "-", "past_due_activities": 1, "active_workflows": 0, "open_tasks": 1 },
+      "accounts": [
+        { "id": 5005, "contact_id": 245, "account_type": "Managed", "balance": 650000, "as_of_date": "2026-04-15" }
+      ],
+      "activities": [
+        { "id": 9041, "contact_id": 245, "activity_type": "Phone Call", "subject": "Staggered retirement planning", "description": "Discussed Maria's part-time retirement. Agreed to model reduced income scenarios. Carlos wants to delay SS to 67.", "start_date": "2026-01-25", "completed": true },
+        { "id": 9042, "contact_id": 245, "activity_type": "Task", "subject": "Model Maria's reduced income scenario", "start_date": "2026-02-28", "completed": false }
+      ],
+      "udfs": [
+        { "udf_id": 1, "name": "Contact Cadence Target", "value": "90" },
+        { "udf_id": 2, "name": "Client Tier", "value": "Gold" },
+        { "udf_id": 3, "name": "Life Goal", "value": "Staggered retirement" },
+        { "udf_id": 8, "name": "Priority Reason", "value": "Task 46 days overdue + minor risk drift" },
+        { "udf_id": 9, "name": "Advisor Note", "value": "Carlos and Maria have different retirement timelines. Maria retiring first. Complex planning." },
+        { "udf_id": 10, "name": "Life Event", "value": "Birthday" },
+        { "udf_id": 11, "name": "Life Event Date", "value": "May 20" }
+      ]
+    },
+    {
+      "id": 301,
+      "type": "Crm",
+      "first_name": "William",
+      "middle_name": "J",
+      "last_name": "Thompson",
+      "full_name": "William J. Thompson",
+      "nickname": "Bill",
+      "status_id": 1,
+      "category_id": 1,
+      "marital_status": "Married",
+      "gender": "Male",
+      "dob": "1970-01-28",
+      "servicing_advisor_id": 1,
+      "client_since": "2018-11-05",
+      "client": true,
+      "header": { "next_review": "-", "past_due_activities": 0, "active_workflows": 0, "open_tasks": 1 },
+      "accounts": [
+        { "id": 5006, "contact_id": 301, "account_type": "Managed", "balance": 720000, "as_of_date": "2026-04-15" }
+      ],
+      "activities": [
+        { "id": 9051, "contact_id": 301, "activity_type": "Phone Call", "subject": "Q1 quarterly review", "description": "Quarterly portfolio review. Performance in line with expectations. Q1 performance summary to be sent.", "start_date": "2026-03-28", "completed": true },
+        { "id": 9052, "contact_id": 301, "activity_type": "Task", "subject": "Send Q1 performance summary", "start_date": "2026-04-15", "completed": false }
+      ],
+      "udfs": [
+        { "udf_id": 1, "name": "Contact Cadence Target", "value": "90" },
+        { "udf_id": 2, "name": "Client Tier", "value": "Gold" },
+        { "udf_id": 3, "name": "Life Goal", "value": "Retirement + Education (2 kids)" },
+        { "udf_id": 8, "name": "Priority Reason", "value": "On track — Q1 summary pending" },
+        { "udf_id": 9, "name": "Advisor Note", "value": "Wants quarterly updates. Moderate risk. Two kids, ages 12 and 15." }
+      ]
+    },
+    {
+      "id": 178,
+      "type": "Crm",
+      "first_name": "Elena",
+      "middle_name": "M",
+      "last_name": "Gutierrez",
+      "full_name": "Elena M. Gutierrez",
+      "nickname": "Elena",
+      "status_id": 1,
+      "category_id": 1,
+      "marital_status": "Single",
+      "gender": "Female",
+      "dob": "1980-12-05",
+      "servicing_advisor_id": 1,
+      "client_since": "2023-09-15",
+      "client": true,
+      "header": { "next_review": "-", "past_due_activities": 0, "active_workflows": 0, "open_tasks": 0 },
+      "accounts": [
+        { "id": 5007, "contact_id": 178, "account_type": "Managed", "balance": 210000, "as_of_date": "2026-04-15" }
+      ],
+      "activities": [
+        { "id": 9061, "contact_id": 178, "activity_type": "Phone Call", "subject": "Index fund review", "description": "Reviewed new index fund investment. Elena excited about long-term growth strategy. No open items.", "start_date": "2026-04-05", "completed": true }
+      ],
+      "udfs": [
+        { "udf_id": 1, "name": "Contact Cadence Target", "value": "90" },
+        { "udf_id": 2, "name": "Client Tier", "value": "Silver" },
+        { "udf_id": 3, "name": "Life Goal", "value": "Wealth accumulation" },
+        { "udf_id": 8, "name": "Priority Reason", "value": "Fully aligned" },
+        { "udf_id": 9, "name": "Advisor Note", "value": "Younger client, growth-oriented. Comfortable with video calls." }
+      ]
+    },
+    {
+      "id": 312,
+      "type": "Crm",
+      "first_name": "David & Lisa",
+      "middle_name": "",
+      "last_name": "Kim",
+      "full_name": "David & Lisa Kim",
+      "nickname": "David & Lisa",
+      "status_id": 1,
+      "category_id": 1,
+      "marital_status": "Married",
+      "gender": "Male",
+      "dob": "1972-07-19",
+      "servicing_advisor_id": 1,
+      "client_since": "2020-02-14",
+      "client": true,
+      "header": { "next_review": "-", "past_due_activities": 0, "active_workflows": 0, "open_tasks": 0 },
+      "accounts": [
+        { "id": 5008, "contact_id": 312, "account_type": "Managed", "balance": 430000, "as_of_date": "2026-04-15" }
+      ],
+      "activities": [
+        { "id": 9071, "contact_id": 312, "activity_type": "Phone Call", "subject": "529 contribution increase", "description": "Increased 529 contributions for daughter starting college 2027. All accounts aligned.", "start_date": "2026-04-12", "completed": true }
+      ],
+      "udfs": [
+        { "udf_id": 1, "name": "Contact Cadence Target", "value": "90" },
+        { "udf_id": 2, "name": "Client Tier", "value": "Silver" },
+        { "udf_id": 3, "name": "Life Goal", "value": "Education (529) + Retirement" },
+        { "udf_id": 8, "name": "Priority Reason", "value": "Fully aligned — recent contact" },
+        { "udf_id": 9, "name": "Advisor Note", "value": "Make decisions together. 529 planning is top priority for next 18 months." }
+      ]
+    }
+  ]
+}
